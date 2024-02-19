@@ -1,11 +1,16 @@
 #include "Board.hpp"
 
-Board::Board(int w, int h, int n, int m){
+Board::Board(void){}
+
+Board::Board(int screen_w, int screen_h, int n, int m){
 	this->n = n;		//ширина поля в клетках
 	this->m = m;		//высота поля в клетках
 
-	float cell_w = w / n;
-	float cell_h = h / m;
+	this->screen_w = screen_w;
+	this->screen_h = screen_h;
+
+	float cell_w = screen_w / n;
+	float cell_h = screen_h / m;
 	float border_width = 2.f;
 
 	cells = new Cell[n * m];
@@ -18,6 +23,22 @@ Board::Board(int w, int h, int n, int m){
 
 Board::~Board(){
 	delete[] cells;
+}
+
+Board& Board::operator=(const Board& b){
+	this->n = b.n;
+	this->m = b.m;
+
+	this->screen_w = b.screen_w;
+	this->screen_h = b.screen_h;
+	if (cells != nullptr) delete[] this->cells;
+
+	this->cells = new Cell[n * m];
+
+	for (int i = 0; i < n * m; ++i){
+		this->cells[i] = b.cells[i];
+	}
+	return *this;
 }
 
 int Board::get_cor_arr(int w, int h){

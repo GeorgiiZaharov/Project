@@ -12,9 +12,12 @@
 class Board
 {
 public:
-	Board(int w, int h, int n, int m);
+	Board(void);
+	Board(int screen_w, int screen_h, int n, int m);
 	// ширина высота количество_столбцов_ячеек количество_строк_ячеек начало_отсчета_по_х начало_отсчета_по_y
 	~Board();
+
+	Board& operator=(const Board& b);
 
 ///////////////////////////////////////////////////////////////////////////////////////	
 	std::set<std::pair<int, int>> was;
@@ -28,7 +31,7 @@ public:
 
 	Cell* cells = nullptr;
 private:
-	int n, m;
+	int n, m, screen_w, screen_h;
 };
 
 #endif
