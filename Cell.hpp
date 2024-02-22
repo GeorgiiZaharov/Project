@@ -5,7 +5,7 @@
 class Cell
 {
 public:
-	Cell();
+	Cell(){};
 	Cell(float x, float y, float cell_w, float cell_h, float border_width);
 
 	Cell& operator=(const Cell& c);

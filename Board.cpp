@@ -1,7 +1,5 @@
 #include "Board.hpp"
 
-Board::Board(void){}
-
 Board::Board(int screen_w, int screen_h, int n, int m){
 	this->n = n;		//ширина поля в клетках
 	this->m = m;		//высота поля в клетках
@@ -9,9 +7,10 @@ Board::Board(int screen_w, int screen_h, int n, int m){
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 
-	float cell_w = screen_w / n;
-	float cell_h = screen_h / m;
-	float border_width = 2.f;
+	cell_w = screen_w / (float)n;
+	cell_h = screen_h / (float)m;
+
+	float border_width = BORDER_WIDTH;
 
 	cells = new Cell[n * m];
 	for (int i = 0; i < m; ++i){
@@ -31,6 +30,10 @@ Board& Board::operator=(const Board& b){
 
 	this->screen_w = b.screen_w;
 	this->screen_h = b.screen_h;
+
+	this->cell_w = b.cell_w;
+	this->cell_h = b.cell_h;
+
 	if (cells != nullptr) delete[] this->cells;
 
 	this->cells = new Cell[n * m];
@@ -63,6 +66,9 @@ void Board::dfs(int w, int h){
 
 		int choice = random() % v.size();		// выбираем куда идти
 		int delta_w = v[choice].first, delta_h = v[choice].second;		// запоминаем направление
+
+		this->graph[std::make_pair(w, h)].push_back(std::make_pair(w + delta_w, h + delta_h));	// добавляем вершины в граф
+		this->graph[std::make_pair(w + delta_w, h + delta_h)].push_back(std::make_pair(w, h));	// добавляем вершины в граф
 
 		// в зависимости от направления удаляем стенки следующего и текущего
 		if (delta_h == 1){

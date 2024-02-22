@@ -1,6 +1,5 @@
 #include "Cell.hpp"
 
-Cell::Cell(){}
 Cell::Cell(float x, float y, float cell_w, float cell_h, float border_width){
 	rec = sf::RectangleShape(sf::Vector2f(cell_w, cell_h));
 	rec.setPosition(x, y);

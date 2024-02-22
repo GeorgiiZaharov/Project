@@ -10,14 +10,11 @@ class Hero : public Entity
 {
 public:
 	Hero(float x, float y, float w, float h);
-	Hero(void);
+	Hero(void){};
 
 	Hero& operator=(const Hero& h);
 
-	void moving(Board& b, int w, int h);
-	
-	float vx, vy;
-	float speed;
+	void moving(Board& b);
 
 };
 

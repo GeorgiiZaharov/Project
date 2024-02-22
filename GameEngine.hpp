@@ -7,6 +7,7 @@
 
 #include "Board.hpp"
 #include "Hero.hpp"
+#include "Enemy.hpp"
 #include "Settings.hpp"
 	
 class GameEngine
@@ -21,6 +22,7 @@ public:
 private:
 	Board b;
 	Hero p;
+	Enemy e;
 	sf::RenderWindow window;
 
 	///////////////////////////
