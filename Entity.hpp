@@ -6,7 +6,7 @@
 class Entity
 {
 public:
-	void draw(sf::RenderWindow& window);
+	virtual void draw(sf::RenderWindow& window) = 0;
 	sf::RectangleShape rec;
 	int poz_x, poz_y;
 	float dx, dy;

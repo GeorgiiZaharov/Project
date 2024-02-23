@@ -34,7 +34,6 @@ public:
 	std::map<std::pair<int, int>, std::vector<std::pair<int, int>>> graph;
 	Cell* cells = nullptr;
 	float cell_w, cell_h;
-private:
 	int n, m, screen_w, screen_h;
 };
 

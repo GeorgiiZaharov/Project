@@ -5,9 +5,10 @@
 #define HERO_WIDTH 20.f 
 #define HERO_SPEED 4
 
+#define ENEMY_COUNT 5
 #define ENEMY_HEIGHT 20.f
 #define ENEMY_WIDTH 20.f 
-#define ENEMY_SPEED 4
+#define ENEMY_SPEED 2
 
 #define BORDER_WIDTH 2.f
 

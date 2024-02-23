@@ -2,7 +2,11 @@
 #define GAME_ENGINE_HPP 
 
 #include <iostream>
+#include <vector>
+#include <random>
+#include <ctime>
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
 #include "Board.hpp"
@@ -14,6 +18,7 @@ class GameEngine
 {
 public:
 	GameEngine(int screen_w, int screen_h);
+	~GameEngine();
 	
 	void run(void);
 
@@ -22,11 +27,16 @@ public:
 private:
 	Board b;
 	Hero p;
-	Enemy e;
+
+	int screen_w, screen_h;
+
+	std::vector<Enemy> enemies;
 	sf::RenderWindow window;
 
+	sf::Clock clock;
 	///////////////////////////
 	bool isMovingUp = false, isMovingDown = false, isMovingLeft = false, isMovingRight = false;
+	bool isShootingUp = false, isShootingDown = false, isShootingLeft = false, isShootingRight = false;
 };
 
 #endif

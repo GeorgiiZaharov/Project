@@ -16,6 +16,11 @@ Hero::Hero(float x, float y, float w, float h){
 
 	poz_x = 0;
 	poz_y = 0;
+
+	gun = Gun(30, 10.f, 6, 2000.f);
+
+	alive = true;
+
 }
 
 Hero& Hero::operator=(const Hero& h){
@@ -23,9 +28,14 @@ Hero& Hero::operator=(const Hero& h){
 	this->dx = h.dx;
 	this->dy = h.dy;
 	this->speed = h.speed;
+	this->gun = h.gun;
 	return *this;
 }
 
+void Hero::draw(sf::RenderWindow& window){
+	gun.draw(window);
+	window.draw(rec);
+}
 
 void Hero::moving(Board& b){
 	for (int i = 0; i < speed; ++i){
@@ -38,4 +48,11 @@ void Hero::moving(Board& b){
 	sf::FloatRect coordinates = rec.getGlobalBounds();
 	poz_x = (int)((coordinates.left + coordinates.width/2)/b.cell_w);
 	poz_y = (int)((coordinates.top + coordinates.height/2)/b.cell_h);
+}
+
+void Hero::shooting(float dx, float dy, float cur_time){
+	sf::FloatRect coordinates = this->rec.getGlobalBounds();
+	float x = coordinates.left + coordinates.width/2;
+	float y = coordinates.top + coordinates.height/2;
+	gun.shoot(x, y, dx, dy, cur_time);
 }
