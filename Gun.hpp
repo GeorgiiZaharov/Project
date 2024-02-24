@@ -10,6 +10,7 @@
 class Gun{
 public:
 	Gun(){}
+	Gun(const Gun& g);
 	Gun(int magazine_size, float bullet_duration, int speed_bullet, float recharge_time);
 
 	Gun& operator=(const Gun& g);

@@ -1,5 +1,17 @@
 #include "Gun.hpp"
 
+Gun::Gun(const Gun& g){
+	this->bullets_in_gun = g.bullets_in_gun;
+	this->magazine_size = g.magazine_size;
+	this->last_shoot_time = g.last_shoot_time;
+	this->bullet_duration = g.bullet_duration;
+	this->speed_bullet = g.speed_bullet;
+	this->recharge_time = g.recharge_time;
+
+	this->magazine.clear();
+	this->magazine = g.magazine;
+}
+
 Gun::Gun(int magazine_size, float bullet_duration, int speed_bullet, float recharge_time){
 	this->magazine_size = magazine_size;
 	this->bullet_duration = bullet_duration;
@@ -27,7 +39,6 @@ Gun& Gun::operator=(const Gun& g){
 }
 
 bool Gun::ready(float cur_time){
-	// std::cout<<cur_time<<std::endl;
 	if (bullets_in_gun && cur_time - last_shoot_time >= bullet_duration) return true;
 	return false;
 }
