@@ -11,7 +11,7 @@ class Gun{
 public:
 	Gun(){}
 	Gun(const Gun& g);
-	Gun(int magazine_size, float bullet_duration, int speed_bullet, float recharge_time);
+	Gun(sf::Texture& tex, int magazine_size, float bullet_duration, int speed_bullet, float recharge_time);
 
 	Gun& operator=(const Gun& g);
 	
@@ -22,6 +22,7 @@ public:
 	int bullets_in_gun, magazine_size, speed_bullet;
 	float last_shoot_time, bullet_duration, recharge_time;
 	std::vector<Bullet> magazine;
+	sf::Texture* tex;
 };
 
 #endif

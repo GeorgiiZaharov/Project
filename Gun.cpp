@@ -10,19 +10,22 @@ Gun::Gun(const Gun& g){
 
 	this->magazine.clear();
 	this->magazine = g.magazine;
+
+	this->tex = g.tex;
 }
 
-Gun::Gun(int magazine_size, float bullet_duration, int speed_bullet, float recharge_time){
+Gun::Gun(sf::Texture& tex, int magazine_size, float bullet_duration, int speed_bullet, float recharge_time){
 	this->magazine_size = magazine_size;
 	this->bullet_duration = bullet_duration;
 	this->speed_bullet = speed_bullet;
 	this->bullets_in_gun = magazine_size;
 	this->recharge_time = recharge_time;
 
-
 	for (int i = 0; i < bullets_in_gun; ++i){
 		this->magazine.push_back(Bullet());
 	}
+
+	this->tex = &tex;
 }
 
 Gun& Gun::operator=(const Gun& g){
@@ -35,6 +38,8 @@ Gun& Gun::operator=(const Gun& g){
 
 	this->magazine.clear();
 	this->magazine = g.magazine;
+
+	this->tex = g.tex;
 	return *this;
 }
 
@@ -46,7 +51,8 @@ bool Gun::ready(float cur_time){
 int Gun::shoot(float x, float y, float dx, float dy, float cur_time){//1 - выстрел, 0 - перезарядка
 	if (ready(cur_time)){
 		this->magazine[magazine_size - bullets_in_gun] = Bullet(
-		    3, 3,//height and weight sprite
+			*tex,
+		    10, 3,//height and weight sprite
 		    x,//координаты старта
 		    y,//координаты старта
 		    dx,//направление

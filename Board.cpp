@@ -7,12 +7,12 @@ Board::Board(int screen_w, int screen_h, int n, int m){
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 
-	cell_w = screen_w / (float)n;
-	cell_h = screen_h / (float)m;
+	this->cell_w = screen_w / (float)n;
+	this->cell_h = screen_h / (float)m;
 
-	float border_width = BORDER_WIDTH;
+	this->border_width = BORDER_WIDTH;
 
-	cells = new Cell[n * m];
+	cells.resize(n * m);
 	for (int i = 0; i < m; ++i){
 		for (int j = 0; j < n; ++j){
 			cells[get_cor_arr(j, i)] = Cell(j * cell_w, i * cell_h, cell_w, cell_h, border_width);
@@ -21,7 +21,10 @@ Board::Board(int screen_w, int screen_h, int n, int m){
 }
 
 Board::~Board(){
-	delete[] cells;
+	cells.clear();
+	graph.clear();
+	was.clear();
+	std::cout<<"Board is ~\n";
 }
 
 Board& Board::operator=(const Board& b){
@@ -34,13 +37,12 @@ Board& Board::operator=(const Board& b){
 	this->cell_w = b.cell_w;
 	this->cell_h = b.cell_h;
 
-	if (cells != nullptr) delete[] this->cells;
 
-	this->cells = new Cell[n * m];
+	this->cells = b.cells;
+	this->graph = b.graph;
 
-	for (int i = 0; i < n * m; ++i){
-		this->cells[i] = b.cells[i];
-	}
+	this->border_width = b.border_width;
+
 	return *this;
 }
 

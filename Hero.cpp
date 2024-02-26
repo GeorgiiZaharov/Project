@@ -1,34 +1,55 @@
 #include "Hero.hpp"
 
-Hero::Hero(float x, float y, float w, float h){
-	this->rec = sf::RectangleShape(sf::Vector2f(w, h));
-	this->rec.setPosition(x, y);
-	this->rec.setFillColor(sf::Color::White);
+Hero::Hero(sf::Texture &tex, float x, float y, float w, float h){
+	this->tex = &tex;
+	this->rec.setTexture(*this->tex);//загружаем sprite
 
+	//масштабируем
+	sf::FloatRect imageBounds = this->rec.getGlobalBounds();
+	float imageScale_x = w / imageBounds.width;
+	float imageScale_y = h / imageBounds.height;
+	this->rec.setScale(imageScale_x, imageScale_y);
 
-	rec.setOrigin(w/2, h/2);
-	rec.move(w/2, h/2);
+	//выбираем часть изображения со спрайтом
+	this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
 
-
-	dx = 0;
+	//устанавливаем напраление
+	dx = 1;
 	dy = 0;
+
+	//скорсть
 	speed = HERO_SPEED;
 
+	//индекс клетки лабиринта
 	poz_x = 0;
 	poz_y = 0;
 
-	gun = Gun(30, 10.f, 6, 2000.f);
+	//перемещаем точку в центр спрайта
+	this->rec.setOrigin(rec.getLocalBounds().width / 2.f, rec.getLocalBounds().height / 2.f);
+	this->rec.setPosition(x + w/2, y + h/2); // устанавливаем позицию
 
+	// //инициализируем оружие
+	// //количество_патронов один_выстрел_раз_в_200мс скорость_пули время_перезарядки_мс
+	// gun = Gun(30, 200.f, 6, 2000.f);
+
+	//живой
 	alive = true;
-
 }
 
 Hero& Hero::operator=(const Hero& h){
-	this->rec = h.rec;
+	this->gun = h.gun;
+	this->alive = h.alive;
+	this->poz_x = h.poz_x;
+	this->poz_y = h.poz_y;
 	this->dx = h.dx;
 	this->dy = h.dy;
 	this->speed = h.speed;
-	this->gun = h.gun;
+	this->rec = h.rec;
+	this->tex = h.tex;
+
+	//выбираем часть изображения со спрайтом
+	// this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
+
 	return *this;
 }
 
@@ -54,5 +75,6 @@ void Hero::shooting(float dx, float dy, float cur_time){
 	sf::FloatRect coordinates = this->rec.getGlobalBounds();
 	float x = coordinates.left + coordinates.width/2;
 	float y = coordinates.top + coordinates.height/2;
+    rotate(dx, dy);
 	gun.shoot(x, y, dx, dy, cur_time);
 }

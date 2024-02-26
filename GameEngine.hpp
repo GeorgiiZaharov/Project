@@ -21,9 +21,10 @@ public:
 	~GameEngine();
 	
 	void run(void);
-
 	void draw(void);
 	void input(void);
+
+	// void restart(void);
 private:
 	Board b;
 	Hero p;
@@ -34,6 +35,8 @@ private:
 	sf::RenderWindow window;
 
 	sf::Clock clock;
+
+	sf::Texture texHero, texEnemy, texBullet;
 	///////////////////////////
 	bool isMovingUp = false, isMovingDown = false, isMovingLeft = false, isMovingRight = false;
 	bool isShootingUp = false, isShootingDown = false, isShootingLeft = false, isShootingRight = false;

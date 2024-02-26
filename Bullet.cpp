@@ -4,19 +4,24 @@ Bullet::Bullet(){
 	was_collision = false;
 }
 
-Bullet::Bullet(float w, float h, float x, float y, float dx, float dy, int speed){
+Bullet::Bullet(sf::Texture& tex, float w, float h, float x, float y, float dx, float dy, int speed){
 
 	float len_direct = static_cast<float>(std::sqrt(dx * dx + dy * dy));
 	this->dx = dx / len_direct;
 	this->dy = dy / len_direct;
 
-	this->rec = sf::RectangleShape(sf::Vector2f(w, h));
+	this->rec.setTexture(tex);
 	this->rec.setPosition(x, y);
-	this->rec.setFillColor(sf::Color::Yellow);
-	//rotate
+	sf::FloatRect imageBounds = this->rec.getGlobalBounds();
+	float imageScale_x = w / imageBounds.width;
+	float imageScale_y = h / imageBounds.height;
+	this->rec.setScale(imageScale_x, imageScale_y);
+
+
+	// rotate
 	this->rec.setOrigin(w/2, h/2);
-	this->rec.move(w/2, h/2);
-	this->rec.rotate(std::atan2(dy, dx)); /////////////////////////////////////////
+	this->rec.setPosition(x + w/2, y + h/2);
+	this->rec.rotate(std::atan2(dy, dx) * 180.f / 3.1415926535f); /////////////////////////////////////////
 
 
 	this->speed = speed;
@@ -27,14 +32,13 @@ Bullet::Bullet(float w, float h, float x, float y, float dx, float dy, int speed
 
 
 Bullet& Bullet::operator=(const Bullet& b){
+	this->was_collision = b.was_collision;
 	this->rec = b.rec;
 	this->poz_x = b.poz_x;
 	this->poz_y = b.poz_y;
-
 	this->dx = b.dx;
 	this->dy = b.dy;
 	this->speed = b.speed;
-	this->was_collision = b.was_collision;
 	return *this;
 }
 

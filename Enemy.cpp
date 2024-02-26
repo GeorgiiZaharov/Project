@@ -1,43 +1,67 @@
 #include "Enemy.hpp"
 
-Enemy::Enemy(Board& b ,float x, float y, float w, float h){
+Enemy::Enemy(sf::Texture& tex, Board& b ,float x, float y, float w, float h){
+	this->tex = &tex;
 
-	this->rec = sf::RectangleShape(sf::Vector2f(w, h));
-	this->rec.setPosition(x, y);
-	this->rec.setFillColor(sf::Color::Black);
+	this->rec.setTexture(*this->tex);//загружаем sprite
 
+	//выбираем часть изображения со спрайтом
+	this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
+
+	//масштабируем
+	sf::FloatRect imageBounds = this->rec.getGlobalBounds();
+	float imageScale_x = w / imageBounds.width;
+	float imageScale_y = h / imageBounds.height;
+	this->rec.setScale(imageScale_x, imageScale_y);
+
+	//устанавливаем начальное положение
+	rec.setPosition(x, y);
+
+	//устанавливаем напраление
 	dx = 0;
 	dy = 0;
+
+	//скорсть
 	speed = ENEMY_SPEED;
-	saw_the_player = false;
-	alive = true;
-	distance = 4;
 
-
+	//вычисляем текущуюю позицию на поле
 	sf::FloatRect coordinates = rec.getGlobalBounds();
 	poz_x = static_cast<int>((coordinates.left + coordinates.width/2)/b.cell_w);
 	poz_y = static_cast<int>((coordinates.top + coordinates.height/2)/b.cell_h);
 
-	gun = Gun(10, 500.f, 3, 2000.f);
+	//флаг жизни и присутствия игрока
+	saw_the_player = false;
+	alive = true;
 
+	//дальность видимости
+	distance = 4;
+
+	//перемещаем точку в центр спрайта
+	this->rec.setOrigin(rec.getLocalBounds().width / 2.f, rec.getLocalBounds().height / 2.f);
+	this->rec.setPosition(x + w / 2, y + h / 2); // устанавливаем позицию
+
+	// //инициализируем оружие
+	// //количество_патронов один_выстрел_раз_в_200мс скорость_пули время_перезарядки_мс
+	// gun = Gun(10, 500.f, 3, 2000.f);
 }
 	
 Enemy& Enemy::operator=(const Enemy& e){
+	this->path_to_player = e.path_to_player;
+	this->distance = e.distance;
+	this->damage = e.damage;
+	this->saw_the_player = e.saw_the_player;
+	this->alive = e.alive;
+	this->gun = e.gun;
 	this->rec = e.rec;
+	this->tex = e.tex;
+	this->poz_x = e.poz_x;
+	this->poz_y = e.poz_y;
 	this->dx = e.dx;
 	this->dy = e.dy;
 	this->speed = e.speed;
 
-	this->saw_the_player = e.saw_the_player;
-	this->poz_x = e.poz_x;
-	this->poz_y = e.poz_y;
-
-	this->distance = e.distance;
-	this->damage = e.damage;
-	this->path_to_player = e.path_to_player;
-	this->alive = e.alive;
-
-	this->gun = e.gun;
+	//выбираем часть изображения со спрайтом
+	// this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
 
 	return *this;
 }
@@ -47,29 +71,20 @@ void Enemy::moving(Board& b, Hero& p){
 		for (int i = 0; i < speed; ++i){
 			path_to_player.clear();
 			bfs(b, p);
-			// std::cout<<"path_to_player\n:";
-			// for (auto i : path_to_player){
-			// 	std::cout<<i.first<<", "<<i.second<<std::endl;
-			// }
 			if (static_cast<int>(path_to_player.size()) == 0){
 				saw_the_player = true;
 				
-				// std::cout<<"Path equal ZERO\n";
 				sf::FloatRect coordinates_player = p.rec.getGlobalBounds();
 				sf::FloatRect coordinates_enemy = this->rec.getGlobalBounds();
 
 
 				dx = coordinates_player.left - coordinates_enemy.left;
 				dy = coordinates_player.top - coordinates_enemy.top;
-				// std::cout<<"player coordinates "<<coordinates_player.left<< ' '<<coordinates_player.top<<std::endl;
-				// std::cout<<"enemy coordinates "<<coordinates_enemy.left<< ' '<<coordinates_enemy.top<<std::endl;
 
 				float len_direct = static_cast<float>(std::sqrt(dx * dx + dy * dy)) + 0.000000001f;
 
-				// std::cout<<"len "<<len_direct<<std::endl;
 				dx = dx/len_direct;
 				dy = dy/len_direct;
-				// std::cout<<"coordinate with path ZERO "<<dx<<" "<<dy<<std::endl;
 			}
 
 			else if (static_cast<int>(path_to_player.size()) <= distance || saw_the_player){
@@ -96,10 +111,10 @@ void Enemy::moving(Board& b, Hero& p){
 				std::pair<int, int> target = path_to_player[0];
 				dx = target.first - poz_x;
 				dy = target.second - poz_y;
-				// std::cout<<"coordinate with path NUMBER "<<dx<<" "<<dy<<std::endl;
 			}
 			rec.move(dx, dy);
 		}
+		rotate(dx, dy);
 	}
 
 	for (int i = 0; i < gun.magazine_size - gun.bullets_in_gun; ++i){
@@ -155,7 +170,6 @@ void Enemy::shooting(Board& b, Hero& p, float cur_time){
 		float target_x = target_coordinates.left + target_coordinates.width/2;
 		float target_y = target_coordinates.top + target_coordinates.height/2;
 
-		// std::cout<<"direction shooting is "<<target_x - x<< ' '<<target_y - y<<std::endl; 
 		int result = gun.shoot(x, y, target_x - x, target_y - y, cur_time);
 		if (result == 1){
 			// std::cout<<this<<" BAH"<<std::endl;

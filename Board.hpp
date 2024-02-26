@@ -32,8 +32,9 @@ public:
 	bool check_collision(sf::FloatRect r);
 
 	std::map<std::pair<int, int>, std::vector<std::pair<int, int>>> graph;
-	Cell* cells = nullptr;
-	float cell_w, cell_h;
+
+	std::vector<Cell> cells;
+	float cell_w, cell_h, border_width;
 	int n, m, screen_w, screen_h;
 };
 

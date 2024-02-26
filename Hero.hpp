@@ -11,7 +11,7 @@
 class Hero : public Entity
 {
 public:
-	Hero(float x, float y, float w, float h);
+	Hero(sf::Texture& tex, float x, float y, float w, float h);
 	Hero(void){};
 
 	Hero& operator=(const Hero& h);
@@ -24,7 +24,6 @@ public:
 	Gun gun;
 
 	bool alive;
-
 };
 
 #endif
