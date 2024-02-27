@@ -24,25 +24,18 @@ Board::~Board(){
 	cells.clear();
 	graph.clear();
 	was.clear();
-	std::cout<<"Board is ~\n";
 }
 
 Board& Board::operator=(const Board& b){
-	this->n = b.n;
-	this->m = b.m;
-
-	this->screen_w = b.screen_w;
-	this->screen_h = b.screen_h;
-
+	this->graph = b.graph;
+	this->cells = b.cells;
 	this->cell_w = b.cell_w;
 	this->cell_h = b.cell_h;
-
-
-	this->cells = b.cells;
-	this->graph = b.graph;
-
 	this->border_width = b.border_width;
-
+	this->n = b.n;
+	this->m = b.m;
+	this->screen_w = b.screen_w;
+	this->screen_h = b.screen_h;
 	return *this;
 }
 

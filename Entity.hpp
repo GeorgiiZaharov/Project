@@ -15,6 +15,7 @@ public:
 	int poz_x, poz_y;
 	float dx, dy;
 	int speed;
+	int health, max_health;
 };
 
 #endif

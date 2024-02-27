@@ -21,9 +21,11 @@ public:
 	void moving(Board& b);
 	void shooting(float dx, float dy, float cur_time);
 
-	Gun gun;
+	int damage; 
 
-	bool alive;
+	sf::RectangleShape borderHealth, healthBar;
+
+	Gun gun;
 };
 
 #endif

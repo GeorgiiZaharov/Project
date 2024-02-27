@@ -24,7 +24,7 @@ public:
 	void draw(void);
 	void input(void);
 
-	// void restart(void);
+	void restart(void);
 private:
 	Board b;
 	Hero p;
@@ -37,9 +37,12 @@ private:
 	sf::Clock clock;
 
 	sf::Texture texHero, texEnemy, texBullet;
+	sf::Font texFont;
 	///////////////////////////
 	bool isMovingUp = false, isMovingDown = false, isMovingLeft = false, isMovingRight = false;
 	bool isShootingUp = false, isShootingDown = false, isShootingLeft = false, isShootingRight = false;
+	///////////////////////////
+	int enemies_alive;
 };
 
 #endif

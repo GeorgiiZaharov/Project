@@ -58,7 +58,7 @@ bool Bullet::check_collision(Board& b){
 	return false;
 }
 
-void Bullet::moving(void){
+void Bullet::moving(){
 	if (!was_collision){
 		// std::cout<<"Bullet direction "<<dx<< ' '<<dy<<std::endl;
 		rec.move(dx, dy);

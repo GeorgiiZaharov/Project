@@ -20,6 +20,11 @@ Cell::Cell(float x, float y, float cell_w, float cell_h, float border_width){
 	line_left = sf::RectangleShape(sf::Vector2f(border_width, cell_h));
 	line_left.setPosition(x, y);
 	line_left.setFillColor(sf::Color::Green);
+
+	this->is_up = true;
+	this->is_right = true;
+	this->is_down = true;
+	this->is_left = true;
 }
 
 Cell& Cell::operator=(const Cell& c){
@@ -30,6 +35,12 @@ Cell& Cell::operator=(const Cell& c){
 	this->line_left = c.line_left;
 	this->x = c.x;
 	this->y = c.y;
+
+	this->is_up = c.is_up;
+	this->is_right = c.is_right;
+	this->is_down = c.is_down;
+	this->is_left = c.is_left;
+
 	return *this;
 }
 

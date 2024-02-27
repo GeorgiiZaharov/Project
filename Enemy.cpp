@@ -22,7 +22,7 @@ Enemy::Enemy(sf::Texture& tex, Board& b ,float x, float y, float w, float h){
 	dy = 0;
 
 	//скорсть
-	speed = ENEMY_SPEED;
+	this->speed = ENEMY_SPEED;
 
 	//вычисляем текущуюю позицию на поле
 	sf::FloatRect coordinates = rec.getGlobalBounds();
@@ -31,10 +31,22 @@ Enemy::Enemy(sf::Texture& tex, Board& b ,float x, float y, float w, float h){
 
 	//флаг жизни и присутствия игрока
 	saw_the_player = false;
-	alive = true;
 
 	//дальность видимости
 	distance = 4;
+
+	//количество здоровья и урон
+	this->damage = ENEMY_DAMAGE;
+
+	this->max_health = HERO_HEALTH;
+	this->health = max_health;
+
+	borderHealth.setFillColor(sf::Color::Transparent);
+	borderHealth.setOutlineThickness(-1.f);
+	borderHealth.setOutlineColor(sf::Color::Black);
+	borderHealth.setSize(sf::Vector2f(HERO_WIDTH, BAR_HEIGHT));
+
+	healthBar.setPosition(sf::Vector2f(x, y - BAR_HEIGHT));
 
 	//перемещаем точку в центр спрайта
 	this->rec.setOrigin(rec.getLocalBounds().width / 2.f, rec.getLocalBounds().height / 2.f);
@@ -48,7 +60,6 @@ Enemy::Enemy(sf::Texture& tex, Board& b ,float x, float y, float w, float h){
 Enemy& Enemy::operator=(const Enemy& e){
 	this->path_to_player = e.path_to_player;
 	this->distance = e.distance;
-	this->damage = e.damage;
 	this->saw_the_player = e.saw_the_player;
 	this->alive = e.alive;
 	this->gun = e.gun;
@@ -60,6 +71,13 @@ Enemy& Enemy::operator=(const Enemy& e){
 	this->dy = e.dy;
 	this->speed = e.speed;
 
+	this->max_health = e.max_health;
+	this->health = e.health;
+	this->damage = e.damage;
+
+	this->borderHealth = e.borderHealth;
+	this->healthBar = e.healthBar;
+
 	//выбираем часть изображения со спрайтом
 	// this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
 
@@ -67,7 +85,7 @@ Enemy& Enemy::operator=(const Enemy& e){
 }
 
 void Enemy::moving(Board& b, Hero& p){
-	if (alive){
+	if (health > 0){
 		for (int i = 0; i < speed; ++i){
 			path_to_player.clear();
 			bfs(b, p);
@@ -122,8 +140,7 @@ void Enemy::moving(Board& b, Hero& p){
 			gun.magazine[i].moving();
 			if (!gun.magazine[i].was_collision){
 				if (gun.magazine[i].check_collision(p.rec.getGlobalBounds())){
-					p.alive = false;
-					std::cout<<"KILL"<<std::endl;
+					p.health -= damage;
 				}
 				gun.magazine[i].check_collision(b);
 			}
@@ -161,7 +178,7 @@ bool Enemy::is_open_pozition(Board& b){
 }
 
 void Enemy::shooting(Board& b, Hero& p, float cur_time){
-	if (alive && is_open_pozition(b)){
+	if (health > 0 && is_open_pozition(b)){
 		sf::FloatRect coordinates = this->rec.getGlobalBounds();
 		float x = coordinates.left + coordinates.width/2;
 		float y = coordinates.top + coordinates.height/2;
@@ -227,6 +244,21 @@ void Enemy::bfs(Board& b, Hero& p){
 }
 
 void Enemy::draw(sf::RenderWindow& window){
-	if (alive)	window.draw(rec);
+	if (health > 0){
+		sf::FloatRect player_cor = rec.getGlobalBounds();
+		float attitude = static_cast<float>(health) / max_health;
+
+		if (attitude >= 0.75)healthBar.setFillColor(sf::Color::Green);
+		else if (attitude >= 0.5)healthBar.setFillColor(sf::Color::Yellow);
+		else healthBar.setFillColor(sf::Color::Red);
+		healthBar.setPosition(player_cor.left, player_cor.top - BAR_HEIGHT);
+		healthBar.setSize(sf::Vector2f(attitude * HERO_WIDTH, BAR_HEIGHT));
+		borderHealth.setPosition(player_cor.left, player_cor.top - BAR_HEIGHT);
+
+		window.draw(healthBar);
+		window.draw(borderHealth);
+
+		window.draw(rec);
+	}
 	gun.draw(window);//ашалеть
 }

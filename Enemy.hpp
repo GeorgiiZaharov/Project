@@ -31,8 +31,10 @@ public:
 
 	std::vector<std::pair<int, int>> path_to_player;
 	int distance;
-	float damage;
+	int damage;
 	bool saw_the_player, alive;
+
+	sf::RectangleShape borderHealth, healthBar;
 
 	Gun gun;
 };

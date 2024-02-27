@@ -10,11 +10,10 @@ class Bullet : public Entity{
 public:
 	Bullet();
 	Bullet(sf::Texture& tex, float w, float h, float x, float y, float dx, float dy, int speed);
-	// Bullet(const float w, const float h, const float x, const float y, const float dx, const float dy, const int speed);
 	Bullet& operator=(const Bullet& b);
 	bool check_collision(sf::FloatRect rec);
 	bool check_collision(Board& b);
-	void moving(void);
+	void moving();
 	void draw(sf::RenderWindow& window) override;
 
 	bool was_collision;

@@ -13,6 +13,19 @@ Hero::Hero(sf::Texture &tex, float x, float y, float w, float h){
 	//выбираем часть изображения со спрайтом
 	this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
 
+	this->max_health = HERO_HEALTH;
+	this->health = max_health;
+
+	borderHealth.setFillColor(sf::Color::Transparent);
+	borderHealth.setOutlineThickness(-1.f);
+	borderHealth.setOutlineColor(sf::Color::Black);
+	borderHealth.setSize(sf::Vector2f(HERO_WIDTH, BAR_HEIGHT));
+
+	healthBar.setPosition(sf::Vector2f(x, y - BAR_HEIGHT));
+
+	this->damage = HERO_DAMAGE;	this->health = max_health;
+
+
 	//устанавливаем напраление
 	dx = 1;
 	dy = 0;
@@ -27,18 +40,10 @@ Hero::Hero(sf::Texture &tex, float x, float y, float w, float h){
 	//перемещаем точку в центр спрайта
 	this->rec.setOrigin(rec.getLocalBounds().width / 2.f, rec.getLocalBounds().height / 2.f);
 	this->rec.setPosition(x + w/2, y + h/2); // устанавливаем позицию
-
-	// //инициализируем оружие
-	// //количество_патронов один_выстрел_раз_в_200мс скорость_пули время_перезарядки_мс
-	// gun = Gun(30, 200.f, 6, 2000.f);
-
-	//живой
-	alive = true;
 }
 
 Hero& Hero::operator=(const Hero& h){
 	this->gun = h.gun;
-	this->alive = h.alive;
 	this->poz_x = h.poz_x;
 	this->poz_y = h.poz_y;
 	this->dx = h.dx;
@@ -47,6 +52,12 @@ Hero& Hero::operator=(const Hero& h){
 	this->rec = h.rec;
 	this->tex = h.tex;
 
+	this->max_health = h.max_health;
+	this->health = h.health;
+	this->damage = h.damage;
+
+	this->borderHealth = h.borderHealth;
+	this->healthBar = h.healthBar;
 	//выбираем часть изображения со спрайтом
 	// this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
 
@@ -55,6 +66,19 @@ Hero& Hero::operator=(const Hero& h){
 
 void Hero::draw(sf::RenderWindow& window){
 	gun.draw(window);
+
+	sf::FloatRect player_cor = rec.getGlobalBounds();
+	float attitude = static_cast<float>(health) / max_health;
+
+	if (attitude >= 0.75)healthBar.setFillColor(sf::Color::Green);
+	else if (attitude >= 0.5)healthBar.setFillColor(sf::Color::Yellow);
+	else healthBar.setFillColor(sf::Color::Red);
+	healthBar.setPosition(player_cor.left, player_cor.top - BAR_HEIGHT);
+	healthBar.setSize(sf::Vector2f(attitude * ENEMY_WIDTH, BAR_HEIGHT));
+	borderHealth.setPosition(player_cor.left, player_cor.top - BAR_HEIGHT);
+
+	window.draw(healthBar);
+	window.draw(borderHealth);
 	window.draw(rec);
 }
 
