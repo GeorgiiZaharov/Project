@@ -1,6 +1,6 @@
 #include "Enemy.hpp"
 
-Enemy::Enemy(sf::Texture& tex, Board& b ,float x, float y, float w, float h){
+Enemy::Enemy(sf::Texture& tex, Board& b, float x, float y, float w, float h, int health, int speed, int damage){
 	this->tex = &tex;
 
 	this->rec.setTexture(*this->tex);//загружаем sprite
@@ -22,7 +22,8 @@ Enemy::Enemy(sf::Texture& tex, Board& b ,float x, float y, float w, float h){
 	dy = 0;
 
 	//скорсть
-	this->speed = ENEMY_SPEED;
+	this->speed = speed;
+
 
 	//вычисляем текущуюю позицию на поле
 	sf::FloatRect coordinates = rec.getGlobalBounds();
@@ -36,15 +37,15 @@ Enemy::Enemy(sf::Texture& tex, Board& b ,float x, float y, float w, float h){
 	distance = 4;
 
 	//количество здоровья и урон
-	this->damage = ENEMY_DAMAGE;
+	this->damage = damage;
 
-	this->max_health = HERO_HEALTH;
+	this->max_health = health;
 	this->health = max_health;
 
 	borderHealth.setFillColor(sf::Color::Transparent);
 	borderHealth.setOutlineThickness(-1.f);
 	borderHealth.setOutlineColor(sf::Color::Black);
-	borderHealth.setSize(sf::Vector2f(HERO_WIDTH, BAR_HEIGHT));
+	borderHealth.setSize(sf::Vector2f(BAR_WIDTH, BAR_HEIGHT));
 
 	healthBar.setPosition(sf::Vector2f(x, y - BAR_HEIGHT));
 
@@ -244,6 +245,8 @@ void Enemy::bfs(Board& b, Hero& p){
 }
 
 void Enemy::draw(sf::RenderWindow& window){
+	gun.draw(window);//ашалеть
+
 	if (health > 0){
 		sf::FloatRect player_cor = rec.getGlobalBounds();
 		float attitude = static_cast<float>(health) / max_health;
@@ -252,7 +255,7 @@ void Enemy::draw(sf::RenderWindow& window){
 		else if (attitude >= 0.5)healthBar.setFillColor(sf::Color::Yellow);
 		else healthBar.setFillColor(sf::Color::Red);
 		healthBar.setPosition(player_cor.left, player_cor.top - BAR_HEIGHT);
-		healthBar.setSize(sf::Vector2f(attitude * HERO_WIDTH, BAR_HEIGHT));
+		healthBar.setSize(sf::Vector2f(attitude * BAR_WIDTH, BAR_HEIGHT));
 		borderHealth.setPosition(player_cor.left, player_cor.top - BAR_HEIGHT);
 
 		window.draw(healthBar);
@@ -260,5 +263,4 @@ void Enemy::draw(sf::RenderWindow& window){
 
 		window.draw(rec);
 	}
-	gun.draw(window);//ашалеть
 }

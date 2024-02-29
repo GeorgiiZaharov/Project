@@ -11,7 +11,7 @@
 class Hero : public Entity
 {
 public:
-	Hero(sf::Texture& tex, float x, float y, float w, float h);
+	Hero(sf::Texture& tex, float x, float y, float w, float h, int health, int speed, int damage);
 	Hero(void){};
 
 	Hero& operator=(const Hero& h);

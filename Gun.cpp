@@ -43,6 +43,17 @@ Gun& Gun::operator=(const Gun& g){
 	return *this;
 }
 
+bool Gun::is_recharging(float cur_time){
+	return (bullets_in_gun == 0 && cur_time - last_shoot_time < recharge_time);
+}
+
+int Gun::get_nbullets(float cur_time){
+	if (bullets_in_gun == 0 && cur_time - last_shoot_time < recharge_time)return 0;
+	else if (bullets_in_gun == 0 && cur_time - last_shoot_time >= recharge_time)return magazine_size;
+	else return bullets_in_gun;
+}
+
+
 bool Gun::ready(float cur_time){
 	if (bullets_in_gun && cur_time - last_shoot_time >= bullet_duration) return true;
 	return false;

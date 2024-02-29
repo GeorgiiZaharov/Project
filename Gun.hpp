@@ -5,6 +5,7 @@
 #include <SFML/System.hpp>
 #include <algorithm>
 #include <vector>
+#include <set>
 #include "Bullet.hpp"
 
 class Gun{
@@ -15,6 +16,8 @@ public:
 
 	Gun& operator=(const Gun& g);
 	
+	bool is_recharging(float cur_time);
+	int get_nbullets(float cur_time);
 	bool ready(float cur_time);
 	int shoot(float x, float y, float dx, float dy, float cur_time);//1 - выстрел, 0 - перезарядка, -1 - иначе
 	void draw(sf::RenderWindow& window);

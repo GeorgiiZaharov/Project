@@ -1,6 +1,6 @@
 #include "Hero.hpp"
 
-Hero::Hero(sf::Texture &tex, float x, float y, float w, float h){
+Hero::Hero(sf::Texture &tex, float x, float y, float w, float h, int health, int speed, int damage){
 	this->tex = &tex;
 	this->rec.setTexture(*this->tex);//загружаем sprite
 
@@ -13,17 +13,17 @@ Hero::Hero(sf::Texture &tex, float x, float y, float w, float h){
 	//выбираем часть изображения со спрайтом
 	this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
 
-	this->max_health = HERO_HEALTH;
+	this->max_health = health;
 	this->health = max_health;
 
 	borderHealth.setFillColor(sf::Color::Transparent);
 	borderHealth.setOutlineThickness(-1.f);
 	borderHealth.setOutlineColor(sf::Color::Black);
-	borderHealth.setSize(sf::Vector2f(HERO_WIDTH, BAR_HEIGHT));
+	borderHealth.setSize(sf::Vector2f(BAR_WIDTH, BAR_HEIGHT));
 
 	healthBar.setPosition(sf::Vector2f(x, y - BAR_HEIGHT));
 
-	this->damage = HERO_DAMAGE;	this->health = max_health;
+	this->damage = damage;	this->health = max_health;
 
 
 	//устанавливаем напраление
@@ -31,7 +31,7 @@ Hero::Hero(sf::Texture &tex, float x, float y, float w, float h){
 	dy = 0;
 
 	//скорсть
-	speed = HERO_SPEED;
+	this->speed = speed;
 
 	//индекс клетки лабиринта
 	poz_x = 0;
@@ -74,7 +74,7 @@ void Hero::draw(sf::RenderWindow& window){
 	else if (attitude >= 0.5)healthBar.setFillColor(sf::Color::Yellow);
 	else healthBar.setFillColor(sf::Color::Red);
 	healthBar.setPosition(player_cor.left, player_cor.top - BAR_HEIGHT);
-	healthBar.setSize(sf::Vector2f(attitude * ENEMY_WIDTH, BAR_HEIGHT));
+	healthBar.setSize(sf::Vector2f(attitude * BAR_WIDTH, BAR_HEIGHT));
 	borderHealth.setPosition(player_cor.left, player_cor.top - BAR_HEIGHT);
 
 	window.draw(healthBar);

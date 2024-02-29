@@ -6,6 +6,6 @@
 
 int main(){
 	srand(time(NULL));
-    GameEngine ge(800, 600);
+    GameEngine ge;
     ge.run();
 }

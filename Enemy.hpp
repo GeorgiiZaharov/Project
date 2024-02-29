@@ -16,7 +16,7 @@ class Enemy : public Entity
 {
 public:
 	Enemy(void){};
-	Enemy(sf::Texture& tex, Board& b, float x, float y, float w, float h);
+	Enemy(sf::Texture& tex, Board& b, float x, float y, float w, float h, int health, int speed, int damage);
 	
 	Enemy& operator=(const Enemy& e);
 

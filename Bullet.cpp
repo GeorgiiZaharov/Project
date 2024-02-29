@@ -51,7 +51,10 @@ bool Bullet::check_collision(sf::FloatRect rec){
 }
 
 bool Bullet::check_collision(Board& b){
-	if (b.check_collision(this->rec.getGlobalBounds())){
+	sf::FloatRect cors = this->rec.getGlobalBounds();
+	int x = static_cast<int> (cors.left / b.cell_w);
+	int y = static_cast<int> (cors.top / b.cell_h);
+	if (b.cells[b.get_cor_arr(x, y)].check_collision(cors)){
 		was_collision = true;
 		return true;
 	}
@@ -60,7 +63,6 @@ bool Bullet::check_collision(Board& b){
 
 void Bullet::moving(){
 	if (!was_collision){
-		// std::cout<<"Bullet direction "<<dx<< ' '<<dy<<std::endl;
 		rec.move(dx, dy);
 	}
 }
@@ -68,5 +70,4 @@ void Bullet::moving(){
 void Bullet::draw(sf::RenderWindow& window){
 	if (!was_collision)
 		window.draw(rec);
-	
 }
