@@ -11,7 +11,7 @@ Hero::Hero(sf::Texture &tex, float x, float y, float w, float h, int health, int
 	this->rec.setScale(imageScale_x, imageScale_y);
 
 	//выбираем часть изображения со спрайтом
-	this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
+	// this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
 
 	this->max_health = health;
 	this->health = max_health;
@@ -58,8 +58,6 @@ Hero& Hero::operator=(const Hero& h){
 
 	this->borderHealth = h.borderHealth;
 	this->healthBar = h.healthBar;
-	//выбираем часть изображения со спрайтом
-	// this->rec.setTextureRect(sf::IntRect(0,0,64, 64));
 
 	return *this;
 }

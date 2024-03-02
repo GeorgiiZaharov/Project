@@ -20,6 +20,8 @@ public:
 	GameEngine(void);
 	~GameEngine();
 	
+	void menu(void);
+	void startInit(void);
 	void run(void);
 	void draw(void);
 	void input(void);
@@ -57,11 +59,14 @@ private:
 	int nbullets_in_player_gun, player_health, player_speed, player_damage;
 	int nbullets_in_enemy_gun, enemy_health, enemy_speed, enemy_damage;
 
-	sf::RectangleShape healthButton, damageButton, bulletButton;
-	sf::Text healthWord, damageWord, bulletWord;
-
-
+	sf::RectangleShape healthButton, damageButton, bulletButton, menuButton, nextLevelButton;
+	sf::Text healthWord, damageWord, bulletWord, menuWord, nextLevelWord;
 	int money_count;
+	//menu
+	sf::Text startWord;
+	sf::RectangleShape startButton;
+	sf::Texture texBackground;
+	sf::Sprite backgroundSprite;
 };
 
 #endif
