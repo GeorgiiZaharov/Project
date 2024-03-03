@@ -1,15 +1,12 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
-#include <vector>
+#include "includes.hpp"
+
 #include "Entity.hpp"
 #include "Board.hpp"
 #include "Hero.hpp"
 #include "Settings.hpp"
-#include <SFML/Window.hpp>
-#include <cmath>
-#include <queue>
-#include <algorithm>
 #include "Gun.hpp"
 
 class Enemy : public Entity

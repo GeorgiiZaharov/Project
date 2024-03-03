@@ -1,12 +1,12 @@
 #ifndef HERO_HPP
 #define HERO_HPP
 
+#include "includes.hpp"
+
 #include "Entity.hpp"
 #include "Board.hpp"
 #include "Gun.hpp"
 #include "Settings.hpp"
-#include <SFML/Window.hpp>
-#include <vector>
 
 class Hero : public Entity
 {

@@ -1,6 +1,7 @@
 #ifndef CELL_HPP
 #define CELL_HPP
-#include <SFML/Graphics.hpp>
+
+#include "includes.hpp"
 
 class Cell
 {

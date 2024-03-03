@@ -1,11 +1,8 @@
 #ifndef GUN_HPP
 #define GUN_HPP 
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <algorithm>
-#include <vector>
-#include <set>
+#include "includes.hpp"
+
 #include "Bullet.hpp"
 
 class Gun{

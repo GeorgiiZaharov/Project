@@ -1,13 +1,7 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-#include <iostream>
-#include <set>
-#include <map>
-#include <vector>
-#include <random>
-#include <SFML/Graphics.hpp>
-
+#include "includes.hpp"
 #include "Settings.hpp"
 #include "Cell.hpp"
 

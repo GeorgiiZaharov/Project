@@ -3,11 +3,11 @@
 GameEngine::GameEngine(void)
 : window(sf::VideoMode::getDesktopMode(), "Recycler", sf::Style::Fullscreen){
 
-    if (!this->texHero.loadFromFile("hero.png"))std::cerr << "No such file for hero";
-    if (!this->texEnemy.loadFromFile("enemy.png"))std::cerr << "No such file for enemy";
-    if (!this->texBullet.loadFromFile("bullet.png"))std::cerr << "No such file for bullet";
+    if (!this->texHero.loadFromFile("src/hero.png"))std::cerr << "No such file for hero";
+    if (!this->texEnemy.loadFromFile("src/enemy.png"))std::cerr << "No such file for enemy";
+    if (!this->texBullet.loadFromFile("src/bullet.png"))std::cerr << "No such file for bullet";
     if (!this->textFont.loadFromFile("src/Roboto-Black.ttf"))std::cerr << "No such file for text";
-    if (!this->texBackground.loadFromFile("background.jpg"))std::cerr << "No such file for background";
+    if (!this->texBackground.loadFromFile("src/background.jpg"))std::cerr << "No such file for background";
 
     this->screen_w = window.getSize().x;
     this->screen_h = window.getSize().y;
@@ -24,8 +24,8 @@ GameEngine::GameEngine(void)
     // backgroundSprite.setSize(sf::Vector2f(screen_w, screen_h));
 
     sf::Image icon;
-    if (!icon.loadFromFile("src/icon.png"))std::cerr << "No such file with icon" << std::endl;
-    window.setIcon(32, 32, icon.getPixelsPtr());
+    if (!icon.loadFromFile("src/icon.jpg"))std::cerr << "No such file with icon" << std::endl;
+    window.setIcon(376, 371, icon.getPixelsPtr());
 
 
 	window.setFramerateLimit(60);

@@ -1,8 +1,7 @@
 #ifndef BULLET_HPP
 #define BULLET_HPP
 
-#include <cmath>
-#include <SFML/Graphics.hpp>
+#include "includes.hpp"
 #include "Entity.hpp"
 #include "Board.hpp"
 

@@ -1,13 +1,7 @@
 #ifndef GAME_ENGINE_HPP
 #define GAME_ENGINE_HPP 
 
-#include <iostream>
-#include <vector>
-#include <random>
-#include <ctime>
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window/Keyboard.hpp>
+#include "includes.hpp"
 
 #include "Board.hpp"
 #include "Hero.hpp"

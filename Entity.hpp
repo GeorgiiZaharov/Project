@@ -1,9 +1,7 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-#include <SFML/Graphics.hpp>
-#include <string>
-#include <cmath>
+#include "includes.hpp"
 
 class Entity
 {
