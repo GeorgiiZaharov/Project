@@ -10,6 +10,8 @@ GameEngine::GameEngine(void)
     if (!this->texBackground.loadFromFile("src/background.jpg"))std::cerr << "No such file for background";
     if (!this->shootSoundBuffer.loadFromFile("src/shootSound.wav"))std::cerr << "No such file for shoot sound";
     if (!this->rechargeSoundBuffer.loadFromFile("src/rechargeSound.wav"))std::cerr << "No such file for recharge sound";
+    if (!this->infoTex.loadFromFile("src/rules.jpg"))std::cerr << "No such file for rules";
+
     this->screen_w = window.getSize().x;
     this->screen_h = window.getSize().y;
 
@@ -22,7 +24,16 @@ GameEngine::GameEngine(void)
     backgroundSprite.setScale(imageScale_x, imageScale_y);
     //устанавливаем спрайт на место
     backgroundSprite.setPosition(0, 0);
-    // backgroundSprite.setSize(sf::Vector2f(screen_w, screen_h));
+
+    //устанавливаем текстуру для правил игры
+    infoSprite.setTexture(infoTex);
+    //масштабируем sprite
+    sf::FloatRect infoBounds = infoSprite.getGlobalBounds();
+    imageScale_x = screen_w / infoBounds.width;
+    imageScale_y = screen_h / infoBounds.height;
+    infoSprite.setScale(imageScale_x, imageScale_y);
+    //устанавливаем спрайт на место
+    infoSprite.setPosition(0, 0);
 
     sf::Image icon;
     if (!icon.loadFromFile("src/icon.jpg"))std::cerr << "No such file with icon" << std::endl;
@@ -138,6 +149,15 @@ GameEngine::GameEngine(void)
     volumeWord.setFillColor(sf::Color::White);
     volumeWord.setPosition(screen_w - 200.f, 0);
     /////////////////////
+    infoButton.setSize(sf::Vector2f(200.f, 40.f));
+    infoButton.setPosition(screen_w - 200.f, 620);
+    infoButton.setFillColor(sf::Color::Black);
+
+    infoWord = sf::Text("INFO", textFont);
+    infoWord.setCharacterSize(30);
+    infoWord.setFillColor(sf::Color::White);
+    infoWord.setPosition(screen_w - 200.f, 620);
+    /////////////////////
     volumeText = sf::Text("Volume", textFont);
     volumeText.setCharacterSize(50);
     volumeText.setFillColor(sf::Color::Black);
@@ -159,6 +179,8 @@ void GameEngine::menu(void){
         window.draw(startWord);
         window.draw(volumeButton);
         window.draw(volumeWord);
+        window.draw(infoButton);
+        window.draw(infoWord);
         window.display();
 
         //input
@@ -184,6 +206,9 @@ void GameEngine::menu(void){
                 }
                 if (volumeButton.getGlobalBounds().contains(sf::Vector2f(mouseX, mouseY))){
                     this->volumeSettings();
+                }
+                if (infoButton.getGlobalBounds().contains(sf::Vector2f(mouseX, mouseY))){
+                    this->showInfo();
                 }
             }
         }
@@ -254,6 +279,42 @@ void GameEngine::volumeSettings(void){
             }
         }
     }   
+}
+
+void GameEngine::showInfo(void){
+    bool isMenu = false;
+    while (window.isOpen() && !isMenu){
+        //draw
+        window.clear();
+        window.draw(infoSprite);
+        window.draw(menuButton);
+        window.draw(menuWord);
+        window.display();
+
+        //input
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Enter){
+                    isMenu = true;
+                }
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                // Получаем координаты нажатия
+                int mouseX = event.mouseButton.x;
+                int mouseY = event.mouseButton.y;
+                if (menuButton.getGlobalBounds().contains(sf::Vector2f(mouseX, mouseY))){
+                    isMenu = true;
+                }
+
+            }
+        }
+    }  
 }
 
 void GameEngine::startInit(void){

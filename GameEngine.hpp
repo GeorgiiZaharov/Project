@@ -16,6 +16,7 @@ public:
 	
 	void menu(void);
 	void volumeSettings(void);
+	void showInfo(void);
 	void startInit(void);
 	void run(void);
 	void draw(void);
@@ -58,10 +59,10 @@ private:
 	sf::Text healthWord, damageWord, bulletWord, menuWord, nextLevelWord;
 	int money_count;
 	//menu
-	sf::Text startWord, volumeWord, volumeText;
-	sf::RectangleShape startButton, volumeButton;
-	sf::Texture texBackground;
-	sf::Sprite backgroundSprite;
+	sf::Text startWord, volumeWord, volumeText, infoWord;
+	sf::RectangleShape startButton, volumeButton, infoButton;
+	sf::Texture texBackground, infoTex;
+	sf::Sprite backgroundSprite, infoSprite;
 
 	//Sounds and music
 	sf::SoundBuffer shootSoundBuffer, rechargeSoundBuffer;
