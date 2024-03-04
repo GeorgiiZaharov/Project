@@ -21,7 +21,7 @@ public:
 
 	bool is_open_pozition(Board& b);
 
-	void shooting(Board& b, Hero& p, float cur_time);
+	void shooting(Board& b, Hero& p, sf::Sound& shootSound, sf::Sound& rechargeSound, float cur_time);
 	void bfs(Board& b, Hero& p);
 
 	void draw(sf::RenderWindow& window) override;
@@ -34,6 +34,8 @@ public:
 	sf::RectangleShape borderHealth, healthBar;
 
 	Gun gun;
+
+	bool wasRechargeSound = false; //нужно ли воспроизводить звук перезарядки
 };
 
 #endif

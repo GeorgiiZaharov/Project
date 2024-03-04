@@ -93,10 +93,19 @@ void Hero::moving(Board& b){
 	poz_y = (int)((coordinates.top + coordinates.height/2)/b.cell_h);
 }
 
-void Hero::shooting(float dx, float dy, float cur_time){
+void Hero::shooting(float dx, float dy, sf::Sound& shootSound, sf::Sound& rechargeSound, float cur_time){
 	sf::FloatRect coordinates = this->rec.getGlobalBounds();
 	float x = coordinates.left + coordinates.width/2;
 	float y = coordinates.top + coordinates.height/2;
-    rotate(dx, dy);
-	gun.shoot(x, y, dx, dy, cur_time);
+    this->rotate(dx, dy);
+	int result = this->gun.shoot(x, y, dx, dy, cur_time);
+	//если в result 1 то произошол выстрел
+	if (result == 1){
+		shootSound.play();
+		wasRechargeSound = false;
+	}
+	if (result == 0 && !wasRechargeSound){
+		rechargeSound.play();
+		wasRechargeSound = true;
+	}
 }

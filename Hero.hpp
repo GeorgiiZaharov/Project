@@ -19,13 +19,15 @@ public:
 	void draw(sf::RenderWindow& window) override;
 
 	void moving(Board& b);
-	void shooting(float dx, float dy, float cur_time);
+	void shooting(float dx, float dy, sf::Sound& shootSound, sf::Sound& rechargeSound, float cur_time);
 
 	int damage; 
 
 	sf::RectangleShape borderHealth, healthBar;
 
 	Gun gun;
+
+	bool wasRechargeSound = false; //нужно ли воспроизводить звук перезарядки
 };
 
 #endif

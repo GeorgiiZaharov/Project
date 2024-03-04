@@ -52,10 +52,6 @@ Enemy::Enemy(sf::Texture& tex, Board& b, float x, float y, float w, float h, int
 	//перемещаем точку в центр спрайта
 	this->rec.setOrigin(rec.getLocalBounds().width / 2.f, rec.getLocalBounds().height / 2.f);
 	this->rec.setPosition(x + w / 2, y + h / 2); // устанавливаем позицию
-
-	// //инициализируем оружие
-	// //количество_патронов один_выстрел_раз_в_200мс скорость_пули время_перезарядки_мс
-	// gun = Gun(10, 500.f, 3, 2000.f);
 }
 	
 Enemy& Enemy::operator=(const Enemy& e){
@@ -178,7 +174,7 @@ bool Enemy::is_open_pozition(Board& b){
 	return false;
 }
 
-void Enemy::shooting(Board& b, Hero& p, float cur_time){
+void Enemy::shooting(Board& b, Hero& p, sf::Sound& shootSound, sf::Sound& rechargeSound, float cur_time){
 	if (health > 0 && is_open_pozition(b)){
 		sf::FloatRect coordinates = this->rec.getGlobalBounds();
 		float x = coordinates.left + coordinates.width/2;
@@ -190,10 +186,12 @@ void Enemy::shooting(Board& b, Hero& p, float cur_time){
 
 		int result = gun.shoot(x, y, target_x - x, target_y - y, cur_time);
 		if (result == 1){
-			// std::cout<<this<<" BAH"<<std::endl;
+			shootSound.play();
+			wasRechargeSound = false;
 		}
-		if (result == 0){
-			// std::cout<<this<<" RECHARGE"<<std::endl;
+		if (result == 0 && !wasRechargeSound){
+			rechargeSound.play();
+			wasRechargeSound = true;
 		}
 	}
 }

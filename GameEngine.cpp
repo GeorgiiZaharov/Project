@@ -8,7 +8,8 @@ GameEngine::GameEngine(void)
     if (!this->texBullet.loadFromFile("src/bullet.png"))std::cerr << "No such file for bullet";
     if (!this->textFont.loadFromFile("src/Roboto-Black.ttf"))std::cerr << "No such file for text";
     if (!this->texBackground.loadFromFile("src/background.jpg"))std::cerr << "No such file for background";
-
+    if (!this->shootSoundBuffer.loadFromFile("src/shootSound.wav"))std::cerr << "No such file for shoot sound";
+    if (!this->rechargeSoundBuffer.loadFromFile("src/rechargeSound.wav"))std::cerr << "No such file for recharge sound";
     this->screen_w = window.getSize().x;
     this->screen_h = window.getSize().y;
 
@@ -29,6 +30,10 @@ GameEngine::GameEngine(void)
 
 
 	window.setFramerateLimit(60);
+
+    //Sound and music init
+    shootSound.setBuffer(shootSoundBuffer);
+    rechargeSound.setBuffer(rechargeSoundBuffer);
 
     /////INFO PANEL/////////
     infPanel.setFillColor(sf::Color(80,80,80));
@@ -106,13 +111,13 @@ GameEngine::GameEngine(void)
     nextLevelWord.setPosition(screen_w * 3.f/4.f + 60.f + 40.f, 500);
     //////////////////////
     menuButton.setSize(sf::Vector2f(160.f, 30.f));
-    menuButton.setPosition(screen_w * 3.f/4.f + 60.f, 550);
+    menuButton.setPosition(screen_w * 3.f/4.f + 60.f, screen_h * 9.f/10.f);
     menuButton.setFillColor(sf::Color::Black);
 
     menuWord = sf::Text("Menu", textFont);
-    menuWord.setCharacterSize(15);
+    menuWord.setCharacterSize(20);
     menuWord.setFillColor(sf::Color::White);
-    menuWord.setPosition(screen_w * 3.f/4.f + 60.f + 80.f, 550);
+    menuWord.setPosition(screen_w * 3.f/4.f + 60.f + 55.f, screen_h * 9.f/10.f);
     //////////////////////
     
     startButton.setSize(sf::Vector2f(200.f, 60.f));
@@ -124,6 +129,20 @@ GameEngine::GameEngine(void)
     startWord.setFillColor(sf::Color::White);
     startWord.setPosition(screen_w - 200.f, 670);
     /////////////////////
+    volumeButton.setSize(sf::Vector2f(200.f, 60.f));
+    volumeButton.setPosition(screen_w - 200.f, 0);
+    volumeButton.setFillColor(sf::Color::Black);
+
+    volumeWord = sf::Text("VOLUME", textFont);
+    volumeWord.setCharacterSize(50);
+    volumeWord.setFillColor(sf::Color::White);
+    volumeWord.setPosition(screen_w - 200.f, 0);
+    /////////////////////
+    volumeText = sf::Text("Volume", textFont);
+    volumeText.setCharacterSize(50);
+    volumeText.setFillColor(sf::Color::Black);
+    volumeText.setPosition(100.f, 1.f/2.f * screen_h);
+    ////////////////////
 
 }
 
@@ -138,6 +157,8 @@ void GameEngine::menu(void){
         window.draw(backgroundSprite);
         window.draw(startButton);
         window.draw(startWord);
+        window.draw(volumeButton);
+        window.draw(volumeWord);
         window.display();
 
         //input
@@ -150,6 +171,7 @@ void GameEngine::menu(void){
                 if (event.key.code == sf::Keyboard::Enter){
                     isStart = true;
                 }
+
             }
 
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
@@ -157,9 +179,77 @@ void GameEngine::menu(void){
                 // Получаем координаты нажатия
                 int mouseX = event.mouseButton.x;
                 int mouseY = event.mouseButton.y;
-                // Получаем координаты игрока
                 if (startButton.getGlobalBounds().contains(sf::Vector2f(mouseX, mouseY))){
                     isStart = true;
+                }
+                if (volumeButton.getGlobalBounds().contains(sf::Vector2f(mouseX, mouseY))){
+                    this->volumeSettings();
+                }
+            }
+        }
+    }   
+}
+
+void GameEngine::volumeSettings(void){
+
+    sf::RectangleShape volumeBar(sf::Vector2f(1.f/3.f * screen_w, 20));
+    volumeBar.setPosition(1.f/3.f * screen_w, 1.f/2.f * screen_h);
+    volumeBar.setFillColor(sf::Color(80, 80, 80));
+
+    sf::RectangleShape volumeSlider(sf::Vector2f(20, 40));
+    volumeSlider.setPosition(1.f/3.f * screen_w, 1.f/2.f * screen_h);
+    volumeSlider.setFillColor(sf::Color::White);
+
+    int volume = 0;
+
+    bool isMenu = false;
+    while (window.isOpen() && !isMenu){
+        //draw
+        window.clear();
+        window.draw(backgroundSprite);
+        window.draw(menuButton);
+        window.draw(menuWord);
+        window.draw(volumeBar);
+        window.draw(volumeSlider);
+        window.draw(volumeText);
+        window.display();
+
+        //input
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Enter){
+                    isMenu = true;
+                }
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                // Получаем координаты нажатия
+                int mouseX = event.mouseButton.x;
+                int mouseY = event.mouseButton.y;
+                if (startButton.getGlobalBounds().contains(sf::Vector2f(mouseX, mouseY))){
+                    isMenu = true;
+                }
+
+            }
+            else if (event.type == sf::Event::MouseMoved)
+            {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                {
+                    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+                    if (mousePos.x >= (1.f/3.f * screen_w) && mousePos.x <= (2.f/3.f * screen_w))
+                    {
+                        volumeSlider.setPosition(mousePos.x - 10, 1.f/2.f * screen_h);
+                        volume = (mousePos.x - (1.f/3.f * screen_w)) / (1.f/3.f * screen_w) * 100;
+                        volumeText.setString("Volume: " + std::to_string(volume));
+                        shootSound.setVolume(volume);
+                        rechargeSound.setVolume(volume);
+                    }
                 }
             }
         }
@@ -214,7 +304,7 @@ void GameEngine::startInit(void){
         rand_cor_x = rand_col * b.cell_w + b.cell_w / 2 - human_size / 2;
         rand_cor_y = rand_row * b.cell_h + b.cell_h / 2 - human_size / 2;
         enemies.emplace_back(texEnemy, b, rand_cor_x, rand_cor_y, human_size, human_size, enemy_health, enemy_speed, enemy_damage);
-        enemies[i].gun = Gun(texBullet, nbullets_in_enemy_gun, 500.f, BULLET_SPEED, 4000.f);
+        enemies[i].gun = Gun(texBullet, nbullets_in_enemy_gun, 500.f, BULLET_SPEED, 2000.f);
     }
     this->money_count = 0;
     clock.restart();
@@ -248,6 +338,8 @@ void GameEngine::draw(void){
     window.draw(healthText);
     window.draw(nenemyText);
     window.draw(moneyText);
+    window.draw(menuButton);
+    window.draw(menuWord);
 
 	window.display();
 }
@@ -321,7 +413,10 @@ void GameEngine::input(void) {
             // Получаем координаты игрока
             sf::FloatRect player_pos = p.rec.getGlobalBounds();
 
-            p.shooting(mouseX - player_pos.left, mouseY - player_pos.top, clock.getElapsedTime().asMilliseconds());
+            p.shooting(mouseX - player_pos.left, mouseY - player_pos.top, shootSound, rechargeSound, clock.getElapsedTime().asMilliseconds());
+            if (menuButton.getGlobalBounds().contains(sf::Vector2f(mouseX, mouseY))){
+                p.health = 0;
+            }
         }
     }
 
@@ -351,15 +446,15 @@ void GameEngine::input(void) {
     }
 
     /////////////////////////////////
-    if (isShootingUp) p.shooting(0, -1, cur_time);
-    if (isShootingRight) p.shooting(1, 0, cur_time);
-    if (isShootingDown) p.shooting(0, 1, cur_time);
-    if (isShootingLeft) p.shooting(-1, 0, cur_time);
+    if (isShootingUp) p.shooting(0, -1, shootSound, rechargeSound, cur_time);
+    if (isShootingRight) p.shooting(1, 0, shootSound, rechargeSound, cur_time);
+    if (isShootingDown) p.shooting(0, 1, shootSound, rechargeSound, cur_time);
+    if (isShootingLeft) p.shooting(-1, 0, shootSound, rechargeSound, cur_time);
 
     for (auto& enemy : enemies){
         enemy.moving(b, p);
         if (p.health <= 0) break;
-        enemy.shooting(b, p, cur_time);
+        enemy.shooting(b, p, shootSound, rechargeSound, cur_time);
     }
     if (p.health > 0 && enemies_alive != 0){
         for (int i = 0; i < p.gun.magazine_size - p.gun.bullets_in_gun; ++i){
