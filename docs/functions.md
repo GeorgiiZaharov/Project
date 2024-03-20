@@ -76,6 +76,73 @@ User --> LevelUp
 
 ```
 * [оффлайн файл](vars_of_use.puml)
+
 ![Диаграмма вариантов использования](vars_of_use.png)
 
 
+## Диаграмма активности
+### Для функциональной возможности "Стрелять"
+```mermaid
+graph TD
+    start((start))
+    shoot{"Пользователь стреляет"}
+    checkAmmo{есть патроны?}
+    decreaseAmmo{"Уменьшить количество патронов"}
+    flyBullet{"пуля летит дальше"}
+    hitEnemy{попадание во врага?}
+    hitWall{попадание в стену?}
+    damageEnemy{Нанести урон врагу}
+    disappearBullet{Пуля исчезает}
+    displayInfo{Отображение количества патронов и статуса оружия}
+    noAmmo{"Патроны закончились"}
+    stop(stop)
+    
+    start --> shoot --> checkAmmo
+    checkAmmo -- да --> decreaseAmmo
+    decreaseAmmo --> flyBullet
+    flyBullet -- да --> hitEnemy
+    hitEnemy -- да --> damageEnemy
+    hitEnemy -- нет --> hitWall
+    hitWall -- да --> disappearBullet --> displayInfo --> stop
+    checkAmmo -- нет --> noAmmo --> displayInfo --> stop
+```
+* [оффлайн файл](fire.puml)
+
+![Диаграмма вариантов использования](fire.png)
+
+### Для функциональной возможности "Покупать улучшения"
+```mermaid
+graph LR
+    start((start))
+    buyUpgrade{"Пользователь желает купить улучшение"}
+    checkCoins{достаточно монет?}
+    decreaseCoins{"Уменьшить количество монет на 10"}
+    applyUpgrade{"Применить выбранное улучшение к персонажу"}
+    showMessage{"Отобразить сообщение о успешной покупке"}
+    showInsufficientCoins{"Отобразить сообщение о недостаточном количестве монет"}
+    stop(stop)
+
+    start --> buyUpgrade
+    buyUpgrade --> checkCoins
+    checkCoins -- да --> decreaseCoins --> applyUpgrade --> showMessage --> stop
+    checkCoins -- нет --> showInsufficientCoins --> stop
+```
+* [оффлайн файл](buy.puml)
+
+![Диаграмма вариантов использования](buy.png)
+
+### Для функциональной возможности "Начать игру"
+```mermaid
+graph TB
+	Start --> Открытие_меню
+	Открытие_меню --> Ожидание
+	Ожидание --> |true| Ожидание
+	Ожидание --> |false| Загрузка_игрового_уровня
+	Загрузка_игрового_уровня --> Персонаж_на_верхней_левой_клетке_лабиринта
+	Персонаж_на_верхней_левой_клетке_лабиринта --> Отображение_лабиринта_с_врагами
+	Отображение_лабиринта_с_врагами --> Отображение_информации_о_персонаже_и_оружии
+	Отображение_информации_о_персонаже_и_оружии --> Stop
+```
+* [оффлайн файл](start.puml)
+
+![Диаграмма вариантов использования](start.png)
