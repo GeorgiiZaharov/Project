@@ -1,0 +1,29 @@
+@startuml
+
+left to right direction
+
+actor Пользователь as User
+
+rectangle "Приложение" {
+  usecase "Настроить громкость" as SetVolume
+  usecase "Узнать основные клавиши для перемещения и стрельбы" as GetControls
+  usecase "Начать игру" as StartGame
+  usecase "Перемещать персонажа" as MoveCharacter
+  usecase "Стрелять" as Shoot
+  usecase "Получать информацию о состоянии персонажа и оружия" as GetInfo
+  usecase "Убивать врагов" as KillEnemies
+  usecase "Покупать улучшения" as BuyUpgrades
+  usecase "Повышать уровень" as LevelUp
+
+  User --> SetVolume
+  User --> GetControls
+  User --> StartGame
+  User --> MoveCharacter
+  User --> Shoot
+  User --> GetInfo
+  User --> KillEnemies
+  User --> BuyUpgrades
+  User --> LevelUp
+}
+
+@enduml

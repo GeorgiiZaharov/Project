@@ -49,37 +49,33 @@
 ## Диаграмма вариантов использования
 * Онлайн генерация (формат mermaid, используется инструмент Диаграммы состояний)
 ```mermaid
-@startuml
+graph LR
 
-left to right direction
+subgraph Приложение
+  SetVolume("Настроить громкость")
+  GetControls("Узнать основные клавиши для перемещения и стрельбы")
+  StartGame("Начать игру")
+  MoveCharacter("Перемещать персонажа")
+  Shoot("Стрелять")
+  GetInfo("Получать информацию о состоянии персонажа и оружия")
+  KillEnemies("Убивать врагов")
+  BuyUpgrades("Покупать улучшения")
+  LevelUp("Повышать уровень")
+end
 
-actor Пользователь as User
+User["Пользователь"]
+User --> SetVolume
+User --> GetControls
+User --> StartGame
+User --> MoveCharacter
+User --> Shoot
+User --> GetInfo
+User --> KillEnemies
+User --> BuyUpgrades
+User --> LevelUp
 
-rectangle "Приложение" {
-  usecase "Настроить громкость" as SetVolume
-  usecase "Узнать основные клавиши для перемещения и стрельбы" as GetControls
-  usecase "Начать игру" as StartGame
-  usecase "Перемещать персонажа" as MoveCharacter
-  usecase "Стрелять" as Shoot
-  usecase "Получать информацию о состоянии персонажа и оружия" as GetInfo
-  usecase "Убивать врагов" as KillEnemies
-  usecase "Покупать улучшения" as BuyUpgrades
-  usecase "Повышать уровень" as LevelUp
-
-  User --> SetVolume
-  User --> GetControls
-  User --> StartGame
-  User --> MoveCharacter
-  User --> Shoot
-  User --> GetInfo
-  User --> KillEnemies
-  User --> BuyUpgrades
-  User --> LevelUp
-}
-
-@enduml
 ```
-* [оффлайн файл](diagrams/vars_of_use.puml)
-![Диаграмма вариантов использования](diagrams/vars_of_use.png)
+* [оффлайн файл](vars_of_use.puml)
+![Диаграмма вариантов использования](vars_of_use.png)
 
 
